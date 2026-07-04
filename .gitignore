@@ -1,0 +1,35 @@
+# ---------- .NET / C# ----------
+# Pastas de build
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+# Arquivos de usuário/IDE do Visual Studio
+.vs/
+*.user
+*.suo
+# Banco de dados SQLite gerado em runtime (os dados são recriados automaticamente)
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# ---------- Node / React ----------
+node_modules/
+dist/
+dist-ssr/
+# Logs de gerenciadores de pacote
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------- Editores / SO ----------
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Arquivos de ambiente local (não versionar segredos)
+.env
+.env.local
+*.local
