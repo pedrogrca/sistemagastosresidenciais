@@ -1,4 +1,6 @@
 using GastosResidenciais.Api.Data;
+using GastosResidenciais.Api.Middleware;
+using GastosResidenciais.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,14 @@ const string PoliticaCorsFrontend = "PermitirFrontend";
 // A connection string vem do appsettings.json ("DefaultConnection").
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Camada de serviços (regras de negócio). Registrada como Scoped porque
+// depende do AppDbContext, que também vive por requisição (Scoped).
+builder.Services.AddScoped<IPessoaService, PessoaService>();
+
+// Handler global de exceções + suporte a respostas no formato ProblemDetails.
+builder.Services.AddExceptionHandler<TratamentoGlobalDeExcecoes>();
+builder.Services.AddProblemDetails();
 
 // Controllers da API.
 builder.Services.AddControllers();
@@ -51,6 +61,10 @@ using (var scope = app.Services.CreateScope())
 // ---------------------------------------------------------------------------
 // Pipeline de requisições HTTP
 // ---------------------------------------------------------------------------
+// O handler global de exceções deve ser um dos primeiros middlewares,
+// para capturar erros de qualquer etapa seguinte do pipeline.
+app.UseExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
