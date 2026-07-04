@@ -22,6 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // depende do AppDbContext, que também vive por requisição (Scoped).
 builder.Services.AddScoped<IPessoaService, PessoaService>();
 builder.Services.AddScoped<ITransacaoService, TransacaoService>();
+builder.Services.AddScoped<ITotaisService, TotaisService>();
 
 // Handler global de exceções + suporte a respostas no formato ProblemDetails.
 builder.Services.AddExceptionHandler<TratamentoGlobalDeExcecoes>();
