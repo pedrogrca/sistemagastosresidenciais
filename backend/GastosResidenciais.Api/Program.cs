@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using GastosResidenciais.Api.Data;
 using GastosResidenciais.Api.Middleware;
 using GastosResidenciais.Api.Services;
@@ -20,13 +21,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Camada de serviços (regras de negócio). Registrada como Scoped porque
 // depende do AppDbContext, que também vive por requisição (Scoped).
 builder.Services.AddScoped<IPessoaService, PessoaService>();
+builder.Services.AddScoped<ITransacaoService, TransacaoService>();
 
 // Handler global de exceções + suporte a respostas no formato ProblemDetails.
 builder.Services.AddExceptionHandler<TratamentoGlobalDeExcecoes>();
 builder.Services.AddProblemDetails();
 
-// Controllers da API.
-builder.Services.AddControllers();
+// Controllers da API. Configuramos o JSON para (de)serializar enums como texto
+// ("Despesa"/"Receita") em vez de números — deixa a API mais legível e evita erros.
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 // CORS: por padrão o navegador bloqueia chamadas de um site (React) para
 // outra origem (a API). Esta política libera o endereço do servidor de
