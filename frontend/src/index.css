@@ -1,0 +1,296 @@
+/* ==========================================================================
+   Estilos globais do aplicativo — Controle de Gastos Residenciais
+   Um único arquivo de estilos, organizado por seções, para manter tudo
+   transparente e fácil de revisar (sem frameworks de CSS).
+   ========================================================================== */
+
+/* ---------- Variáveis de tema ---------- */
+:root {
+  --cor-primaria: #4338ca;
+  --cor-primaria-escura: #3730a3;
+  --cor-primaria-clara: #eef2ff;
+
+  --cor-receita: #059669;
+  --cor-receita-bg: #d1fae5;
+  --cor-despesa: #dc2626;
+  --cor-despesa-bg: #fee2e2;
+
+  --cor-texto: #1f2937;
+  --cor-texto-suave: #6b7280;
+  --cor-borda: #e5e7eb;
+  --cor-fundo: #f3f4f6;
+  --cor-card: #ffffff;
+
+  --cor-aviso-bg: #fef3c7;
+  --cor-aviso-texto: #92400e;
+  --cor-erro-bg: #fee2e2;
+  --cor-erro-texto: #991b1b;
+
+  --raio: 10px;
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+
+  color-scheme: light;
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ---------- Reset básico ---------- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  line-height: 1.5;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ---------- Layout principal ---------- */
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px 48px;
+}
+
+.cabecalho {
+  text-align: center;
+  padding: 32px 16px 24px;
+}
+
+.cabecalho h1 {
+  font-size: 28px;
+  color: var(--cor-primaria);
+}
+
+.cabecalho p {
+  margin: 6px 0 0;
+  color: var(--cor-texto-suave);
+}
+
+/* ---------- Abas de navegação ---------- */
+.abas {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.aba {
+  border: 1px solid var(--cor-borda);
+  background: var(--cor-card);
+  color: var(--cor-texto-suave);
+  padding: 10px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.aba:hover {
+  border-color: var(--cor-primaria);
+  color: var(--cor-primaria);
+}
+
+.aba.ativa {
+  background: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+  color: #fff;
+}
+
+/* ---------- Cartões ---------- */
+.card {
+  background: var(--cor-card);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.card h2 {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+/* ---------- Formulários ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--cor-texto);
+}
+
+.campo input,
+.campo select {
+  padding: 10px 12px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  font-size: 15px;
+  background: #fff;
+  color: var(--cor-texto);
+}
+
+.campo input:focus,
+.campo select:focus {
+  outline: none;
+  border-color: var(--cor-primaria);
+  box-shadow: 0 0 0 3px var(--cor-primaria-clara);
+}
+
+/* ---------- Botões ---------- */
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primario {
+  background: var(--cor-primaria);
+  color: #fff;
+}
+
+.btn-primario:hover:not(:disabled) {
+  background: var(--cor-primaria-escura);
+}
+
+.btn-perigo {
+  background: transparent;
+  color: var(--cor-despesa);
+  border: 1px solid var(--cor-despesa);
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+.btn-perigo:hover:not(:disabled) {
+  background: var(--cor-despesa-bg);
+}
+
+/* ---------- Tabelas ---------- */
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.tabela th,
+.tabela td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.tabela th {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--cor-texto-suave);
+}
+
+.tabela tbody tr:hover {
+  background: var(--cor-fundo);
+}
+
+.tabela .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Selos (badges) ---------- */
+.selo {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.selo-receita {
+  background: var(--cor-receita-bg);
+  color: var(--cor-receita);
+}
+
+.selo-despesa {
+  background: var(--cor-despesa-bg);
+  color: var(--cor-despesa);
+}
+
+.selo-menor {
+  background: var(--cor-aviso-bg);
+  color: var(--cor-aviso-texto);
+}
+
+/* ---------- Valores monetários ---------- */
+.valor-positivo {
+  color: var(--cor-receita);
+  font-weight: 600;
+}
+
+.valor-negativo {
+  color: var(--cor-despesa);
+  font-weight: 600;
+}
+
+/* ---------- Mensagens (erro, vazio, carregando) ---------- */
+.alerta-erro {
+  background: var(--cor-erro-bg);
+  color: var(--cor-erro-texto);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.aviso {
+  background: var(--cor-aviso-bg);
+  color: var(--cor-aviso-texto);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.vazio {
+  text-align: center;
+  color: var(--cor-texto-suave);
+  padding: 24px;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 640px) {
+  .cabecalho h1 {
+    font-size: 22px;
+  }
+
+  .tabela th,
+  .tabela td {
+    padding: 8px;
+  }
+}
