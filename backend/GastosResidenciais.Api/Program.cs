@@ -1,14 +1,8 @@
-using System.Text;
 using System.Text.Json.Serialization;
 using GastosResidenciais.Api.Data;
 using GastosResidenciais.Api.Middleware;
-using GastosResidenciais.Api.Models;
 using GastosResidenciais.Api.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,13 +23,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IPessoaService, PessoaService>();
 builder.Services.AddScoped<ITransacaoService, TransacaoService>();
 builder.Services.AddScoped<ITotaisService, TotaisService>();
-
-// Serviços de autenticação.
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-// PasswordHasher é sem estado, então pode ser Singleton. Faz o hash e a
-// verificação segura das senhas.
-builder.Services.AddSingleton<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>();
 
 // Handler global de exceções + suporte a respostas no formato ProblemDetails.
 builder.Services.AddExceptionHandler<TratamentoGlobalDeExcecoes>();
@@ -60,60 +47,9 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
-// ---------------------------------------------------------------------------
-// Autenticação e autorização (JWT)
-// ---------------------------------------------------------------------------
-// Configura a validação do token JWT em cada requisição: assinatura, emissor,
-// audiência e validade. Os valores vêm da seção "Jwt" do appsettings.json.
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Emissor"],
-            ValidAudience = builder.Configuration["Jwt:Audiencia"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Chave"]!))
-        };
-    });
-
-builder.Services.AddAuthorization();
-
 // Swagger/OpenAPI: documentação interativa da API (útil para testes manuais).
-// Também habilitamos o botão "Authorize" para enviar o token JWT nos testes.
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    var esquemaJwt = new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Cole o token JWT recebido no login (sem o prefixo 'Bearer')."
-    };
-    options.AddSecurityDefinition("Bearer", esquemaJwt);
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -143,8 +79,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(PoliticaCorsFrontend);
 
-// A autenticação (valida o token) deve vir antes da autorização (verifica o acesso).
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,6 +1,5 @@
 using GastosResidenciais.Api.DTOs;
 using GastosResidenciais.Api.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GastosResidenciais.Api.Controllers;
@@ -9,7 +8,6 @@ namespace GastosResidenciais.Api.Controllers;
 /// Endpoint de consulta dos totais (receitas, despesas e saldo) por pessoa
 /// e o total geral de todo o sistema.
 /// </summary>
-[Authorize] // exige um token JWT válido para acessar qualquer endpoint deste controller
 [ApiController]
 [Route("api/[controller]")]
 public class TotaisController : ControllerBase

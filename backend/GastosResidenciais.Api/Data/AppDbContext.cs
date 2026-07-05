@@ -19,9 +19,6 @@ public class AppDbContext : DbContext
     /// <summary>Tabela de transações.</summary>
     public DbSet<Transacao> Transacoes => Set<Transacao>();
 
-    /// <summary>Tabela de usuários (autenticação).</summary>
-    public DbSet<Usuario> Usuarios => Set<Usuario>();
-
     /// <summary>
     /// Configuração do mapeamento objeto-relacional (colunas, restrições e relacionamentos).
     /// </summary>
@@ -64,25 +61,6 @@ public class AppDbContext : DbContext
                   .IsRequired()
                   .HasConversion<string>()
                   .HasMaxLength(20);
-        });
-
-        modelBuilder.Entity<Usuario>(entity =>
-        {
-            entity.HasKey(u => u.Id);
-
-            entity.Property(u => u.Nome)
-                  .IsRequired()
-                  .HasMaxLength(150);
-
-            entity.Property(u => u.Email)
-                  .IsRequired()
-                  .HasMaxLength(200);
-
-            entity.Property(u => u.SenhaHash)
-                  .IsRequired();
-
-            // Não pode haver dois usuários com o mesmo e-mail.
-            entity.HasIndex(u => u.Email).IsUnique();
         });
     }
 }

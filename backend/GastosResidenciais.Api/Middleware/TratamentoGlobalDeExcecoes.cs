@@ -27,7 +27,6 @@ public class TratamentoGlobalDeExcecoes : IExceptionHandler
         var (statusCode, titulo) = exception switch
         {
             NaoEncontradoException => (StatusCodes.Status404NotFound, "Recurso não encontrado"),
-            NaoAutorizadoException => (StatusCodes.Status401Unauthorized, "Não autorizado"),
             RegraNegocioException => (StatusCodes.Status400BadRequest, "Regra de negócio violada"),
             _ => (StatusCodes.Status500InternalServerError, "Erro interno do servidor")
         };

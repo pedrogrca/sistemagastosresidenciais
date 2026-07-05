@@ -1,6 +1,5 @@
 using GastosResidenciais.Api.DTOs;
 using GastosResidenciais.Api.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GastosResidenciais.Api.Controllers;
@@ -10,7 +9,6 @@ namespace GastosResidenciais.Api.Controllers;
 /// O controller é propositalmente "fino": ele apenas recebe a requisição,
 /// chama o serviço e devolve o status HTTP adequado.
 /// </summary>
-[Authorize] // exige um token JWT válido para acessar qualquer endpoint deste controller
 [ApiController]
 [Route("api/[controller]")]
 public class PessoasController : ControllerBase

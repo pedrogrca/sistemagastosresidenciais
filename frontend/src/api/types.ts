@@ -36,6 +36,8 @@ export interface CriarTransacaoRequest {
   pessoaId: number
 }
 
+/* ---------- Totais ---------- */
+
 /** Totais consolidados de uma pessoa. */
 export interface TotalPorPessoa {
   pessoaId: number

@@ -1,128 +1,162 @@
 /* ==========================================================================
-   Estilos globais do aplicativo — Controle de Gastos Residenciais
-   Um único arquivo de estilos, organizado por seções, para manter tudo
-   transparente e fácil de revisar (sem frameworks de CSS).
+   Estilos globais — Controle de Gastos Residenciais
+   Tema claro e minimalista. Um único arquivo, organizado por seções, sem
+   frameworks de CSS (tudo transparente e fácil de revisar).
    ========================================================================== */
 
 /* ---------- Variáveis de tema ---------- */
 :root {
-  --cor-primaria: #4338ca;
-  --cor-primaria-escura: #3730a3;
-  --cor-primaria-clara: #eef2ff;
+  --primaria: #4f46e5;
+  --primaria-escura: #4338ca;
+  --primaria-suave: #eef2ff;
 
-  --cor-receita: #059669;
-  --cor-receita-bg: #d1fae5;
-  --cor-despesa: #dc2626;
-  --cor-despesa-bg: #fee2e2;
+  --receita: #059669;
+  --receita-suave: #ecfdf5;
+  --despesa: #dc2626;
+  --despesa-suave: #fef2f2;
 
-  --cor-texto: #1f2937;
-  --cor-texto-suave: #6b7280;
-  --cor-borda: #e5e7eb;
-  --cor-fundo: #f3f4f6;
-  --cor-card: #ffffff;
+  --aviso-texto: #b45309;
+  --aviso-suave: #fffbeb;
+  --erro-texto: #b91c1c;
+  --erro-suave: #fef2f2;
 
-  --cor-aviso-bg: #fef3c7;
-  --cor-aviso-texto: #92400e;
-  --cor-erro-bg: #fee2e2;
-  --cor-erro-texto: #991b1b;
+  --texto: #0f172a;
+  --texto-suave: #64748b;
+  --borda: #e5e7eb;
+  --fundo: #f1f5f9;
+  --superficie: #ffffff;
 
-  --raio: 10px;
-  --sombra: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --raio: 14px;
+  --raio-sm: 9px;
+  --sombra-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --sombra-md: 0 6px 20px rgba(15, 23, 42, 0.08);
 
   color-scheme: light;
   font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* ---------- Reset básico ---------- */
+/* ---------- Reset ---------- */
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: var(--cor-fundo);
-  color: var(--cor-texto);
+  color: var(--texto);
+  background: var(--fundo);
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
 }
 
 h1, h2, h3 {
   margin: 0;
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
-/* ---------- Layout principal ---------- */
-.app {
+/* ---------- Barra superior (topo do app) ---------- */
+.topbar {
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borda);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar-conteudo {
   max-width: 960px;
   margin: 0 auto;
-  padding: 0 16px 48px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.cabecalho {
-  text-align: center;
-  padding: 32px 16px 24px;
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--primaria);
 }
 
-.cabecalho h1 {
-  font-size: 28px;
-  color: var(--cor-primaria);
-}
-
-.cabecalho p {
-  margin: 6px 0 0;
-  color: var(--cor-texto-suave);
+/* ---------- Conteúdo principal ---------- */
+.conteudo {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 20px 56px;
 }
 
 /* ---------- Abas de navegação ---------- */
 .abas {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
+  display: inline-flex;
+  gap: 4px;
+  padding: 5px;
+  background: #e8ecf3;
+  border-radius: 999px;
   margin-bottom: 24px;
-  flex-wrap: wrap;
 }
 
 .aba {
-  border: 1px solid var(--cor-borda);
-  background: var(--cor-card);
-  color: var(--cor-texto-suave);
-  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  color: var(--texto-suave);
+  padding: 9px 20px;
   border-radius: 999px;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   transition: all 0.15s ease;
 }
 
 .aba:hover {
-  border-color: var(--cor-primaria);
-  color: var(--cor-primaria);
+  color: var(--texto);
 }
 
 .aba.ativa {
-  background: var(--cor-primaria);
-  border-color: var(--cor-primaria);
-  color: #fff;
+  background: var(--superficie);
+  color: var(--primaria);
+  box-shadow: var(--sombra-sm);
 }
 
 /* ---------- Cartões ---------- */
 .card {
-  background: var(--cor-card);
-  border: 1px solid var(--cor-borda);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
   border-radius: var(--raio);
-  box-shadow: var(--sombra);
+  box-shadow: var(--sombra-sm);
   padding: 24px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .card h2 {
-  font-size: 18px;
+  font-size: 17px;
   margin-bottom: 16px;
+}
+
+.card-header {
+  margin-bottom: 18px;
+}
+
+.card-header h2 {
+  margin-bottom: 4px;
+}
+
+.card-subtitulo {
+  color: var(--texto-suave);
+  font-size: 14px;
+  margin: 0;
 }
 
 /* ---------- Formulários ---------- */
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 16px;
   align-items: end;
 }
@@ -134,66 +168,92 @@ h1, h2, h3 {
 }
 
 .campo label {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--cor-texto);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texto);
 }
 
 .campo input,
 .campo select {
   padding: 10px 12px;
-  border: 1px solid var(--cor-borda);
-  border-radius: 8px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-sm);
   font-size: 15px;
   background: #fff;
-  color: var(--cor-texto);
+  color: var(--texto);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .campo input:focus,
 .campo select:focus {
   outline: none;
-  border-color: var(--cor-primaria);
-  box-shadow: 0 0 0 3px var(--cor-primaria-clara);
+  border-color: var(--primaria);
+  box-shadow: 0 0 0 3px var(--primaria-suave);
 }
 
 /* ---------- Botões ---------- */
 .btn {
   border: none;
-  border-radius: 8px;
+  border-radius: var(--raio-sm);
   padding: 10px 18px;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, transform 0.05s ease, opacity 0.15s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
 }
 
 .btn:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
 .btn-primario {
-  background: var(--cor-primaria);
+  background: var(--primaria);
   color: #fff;
+  box-shadow: var(--sombra-sm);
 }
 
 .btn-primario:hover:not(:disabled) {
-  background: var(--cor-primaria-escura);
+  background: var(--primaria-escura);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--texto-suave);
+  border: 1px solid var(--borda);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--fundo);
+  color: var(--texto);
 }
 
 .btn-perigo {
   background: transparent;
-  color: var(--cor-despesa);
-  border: 1px solid var(--cor-despesa);
-  padding: 6px 12px;
-  font-size: 14px;
+  color: var(--despesa);
+  border: 1px solid #fecaca;
+  padding: 7px 12px;
 }
 
 .btn-perigo:hover:not(:disabled) {
-  background: var(--cor-despesa-bg);
+  background: var(--despesa-suave);
+}
+
+.btn-bloco {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
 }
 
 /* ---------- Tabelas ---------- */
+.tabela-wrap {
+  overflow-x: auto;
+}
+
 .tabela {
   width: 100%;
   border-collapse: collapse;
@@ -203,22 +263,33 @@ h1, h2, h3 {
 .tabela th,
 .tabela td {
   text-align: left;
-  padding: 12px;
-  border-bottom: 1px solid var(--cor-borda);
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--borda);
+  white-space: nowrap;
 }
 
-.tabela th {
-  font-size: 13px;
+.tabela thead th {
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--cor-texto-suave);
+  letter-spacing: 0.05em;
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+
+.tabela tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .tabela tbody tr:hover {
-  background: var(--cor-fundo);
+  background: #fafbfc;
 }
 
-.tabela .num {
+.tabela tfoot td {
+  border-top: 2px solid var(--borda);
+  font-weight: 700;
+}
+
+.num {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -226,71 +297,100 @@ h1, h2, h3 {
 /* ---------- Selos (badges) ---------- */
 .selo {
   display: inline-block;
-  padding: 2px 10px;
+  padding: 3px 10px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
 }
 
 .selo-receita {
-  background: var(--cor-receita-bg);
-  color: var(--cor-receita);
+  background: var(--receita-suave);
+  color: var(--receita);
 }
 
 .selo-despesa {
-  background: var(--cor-despesa-bg);
-  color: var(--cor-despesa);
+  background: var(--despesa-suave);
+  color: var(--despesa);
 }
 
 .selo-menor {
-  background: var(--cor-aviso-bg);
-  color: var(--cor-aviso-texto);
+  background: var(--aviso-suave);
+  color: var(--aviso-texto);
 }
 
 /* ---------- Valores monetários ---------- */
 .valor-positivo {
-  color: var(--cor-receita);
+  color: var(--receita);
   font-weight: 600;
 }
 
 .valor-negativo {
-  color: var(--cor-despesa);
+  color: var(--despesa);
   font-weight: 600;
 }
 
-/* ---------- Mensagens (erro, vazio, carregando) ---------- */
+/* ---------- Cartões de resumo (dashboard de totais) ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.stat {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra-sm);
+  padding: 18px 20px;
+}
+
+.stat span {
+  display: block;
+  font-size: 13px;
+  color: var(--texto-suave);
+  margin-bottom: 6px;
+}
+
+.stat strong {
+  font-size: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Mensagens ---------- */
 .alerta-erro {
-  background: var(--cor-erro-bg);
-  color: var(--cor-erro-texto);
-  padding: 12px 16px;
-  border-radius: 8px;
+  background: var(--erro-suave);
+  color: var(--erro-texto);
+  border: 1px solid #fecaca;
+  padding: 11px 14px;
+  border-radius: var(--raio-sm);
   margin-bottom: 16px;
   font-size: 14px;
 }
 
 .aviso {
-  background: var(--cor-aviso-bg);
-  color: var(--cor-aviso-texto);
+  background: var(--aviso-suave);
+  color: var(--aviso-texto);
   padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: var(--raio-sm);
+  font-size: 13px;
   margin-top: 12px;
 }
 
 .vazio {
   text-align: center;
-  color: var(--cor-texto-suave);
-  padding: 24px;
+  color: var(--texto-suave);
+  padding: 28px;
 }
 
 /* ---------- Responsividade ---------- */
 @media (max-width: 640px) {
-  .cabecalho h1 {
-    font-size: 22px;
-  }
-
   .tabela th,
   .tabela td {
-    padding: 8px;
+    padding: 10px;
+  }
+
+  .stat strong {
+    font-size: 20px;
   }
 }

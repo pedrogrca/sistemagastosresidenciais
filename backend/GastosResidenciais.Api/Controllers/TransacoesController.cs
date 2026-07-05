@@ -1,6 +1,5 @@
 using GastosResidenciais.Api.DTOs;
 using GastosResidenciais.Api.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GastosResidenciais.Api.Controllers;
@@ -8,7 +7,6 @@ namespace GastosResidenciais.Api.Controllers;
 /// <summary>
 /// Endpoints REST para o cadastro de transações (apenas criação e listagem).
 /// </summary>
-[Authorize] // exige um token JWT válido para acessar qualquer endpoint deste controller
 [ApiController]
 [Route("api/[controller]")]
 public class TransacoesController : ControllerBase

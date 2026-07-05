@@ -32,7 +32,7 @@ namespace GastosResidenciais.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pessoas");
+                    b.ToTable("Pessoas", (string)null);
                 });
 
             modelBuilder.Entity("GastosResidenciais.Api.Models.Transacao", b =>
@@ -61,35 +61,7 @@ namespace GastosResidenciais.Api.Migrations
 
                     b.HasIndex("PessoaId");
 
-                    b.ToTable("Transacoes");
-                });
-
-            modelBuilder.Entity("GastosResidenciais.Api.Models.Usuario", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("SenhaHash")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("Usuarios");
+                    b.ToTable("Transacoes", (string)null);
                 });
 
             modelBuilder.Entity("GastosResidenciais.Api.Models.Transacao", b =>

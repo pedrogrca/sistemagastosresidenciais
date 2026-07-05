@@ -16,10 +16,13 @@ const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5049/api'
  * Wrapper genérico sobre o fetch: monta a URL, envia/recebe JSON e converte
  * respostas de erro do back-end (ProblemDetails) em Error com mensagem legível.
  */
-async function request<T>(caminho: string, opcoes?: RequestInit): Promise<T> {
+async function request<T>(caminho: string, opcoes: RequestInit = {}): Promise<T> {
   const resposta = await fetch(`${API_BASE_URL}${caminho}`, {
-    headers: { 'Content-Type': 'application/json' },
     ...opcoes,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(opcoes.headers as Record<string, string> | undefined),
+    },
   })
 
   if (!resposta.ok) {
