@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { PessoasPage } from './pages/PessoasPage'
 
 /** Abas disponíveis na aplicação. */
 type Aba = 'pessoas' | 'transacoes' | 'totais'
@@ -41,11 +42,7 @@ function App() {
 
       <main className="conteudo">
         {/* As telas reais serão adicionadas nas próximas etapas. */}
-        {abaAtiva === 'pessoas' && (
-          <div className="card">
-            <p className="vazio">Em breve: cadastro de pessoas.</p>
-          </div>
-        )}
+        {abaAtiva === 'pessoas' && <PessoasPage />}
         {abaAtiva === 'transacoes' && (
           <div className="card">
             <p className="vazio">Em breve: cadastro de transações.</p>

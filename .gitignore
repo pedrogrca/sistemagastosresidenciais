@@ -33,3 +33,6 @@ Thumbs.db
 .env
 .env.local
 *.local
+
+# Ferramentas do Claude Code (não fazem parte da entrega)
+.claude/
