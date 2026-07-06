@@ -157,6 +157,26 @@ Content-Type: application/json
 
 ---
 
+## 🧪 Testes automatizados
+
+O back-end possui testes de unidade (**xUnit**) cobrindo as regras de negócio,
+usando um banco **SQLite em memória** (rápido e isolado por teste).
+
+Para rodar, na raiz do projeto:
+
+```bash
+cd backend
+dotnet test
+```
+
+Principais cenários cobertos:
+
+- Geração automática de Id e marcação de menor de idade (limite de 18 anos);
+- Exclusão de pessoa apagando suas transações **em cascata**;
+- **Menor de idade não pode cadastrar receita**;
+- Transação com **pessoa inexistente** é rejeitada;
+- Cálculo dos **totais por pessoa e do total geral** (incluindo pessoa sem transações).
+
 ## 🧠 Decisões técnicas
 
 - **Arquitetura em camadas** (Controllers → Services → EF Core): os controllers ficam finos e as regras de negócio concentradas nos serviços.
