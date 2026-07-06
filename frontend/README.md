@@ -1,32 +1,24 @@
-# React + TypeScript + Vite
+# Front-end — Controle de Gastos Residenciais
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Interface em **React + TypeScript** (Vite) que consome a API do sistema.
 
-Currently, two official plugins are available:
+## Como rodar
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+A aplicação abre em **http://localhost:5173** e consome a API em `http://localhost:5049/api`
+(pode ser alterado pela variável de ambiente `VITE_API_URL`).
+
+> ⚠️ Suba o back-end antes do front-end. Veja as instruções completas no
+> [README principal](../README.md), na raiz do repositório.
+
+## Scripts
+
+| Comando | Descrição |
+|---|---|
+| `npm run dev` | Servidor de desenvolvimento (com hot reload) |
+| `npm run build` | Checagem de tipos + build de produção |
+| `npm run preview` | Pré-visualiza o build de produção |
