@@ -1,6 +1,88 @@
-@GastosResidenciais.Api_HostAddress = http://localhost:5049
+@host = http://localhost:5049
 
-GET {{GastosResidenciais.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+# ============================================================================
+# Exemplos de requisições para testar a API.
+# Abra este arquivo no VS Code (extensão "REST Client"), Visual Studio ou Rider
+# e clique em "Send Request" acima de cada requisição.
+# Suba o back-end antes (dotnet run) — ele responde em http://localhost:5049.
+# ============================================================================
 
-###
+
+# ----------------------------------------------------------------------------
+# Pessoas
+# ----------------------------------------------------------------------------
+
+### Listar todas as pessoas
+GET {{host}}/api/pessoas
+
+### Criar pessoa (adulto)
+POST {{host}}/api/pessoas
+Content-Type: application/json
+
+{
+  "nome": "Ana Souza",
+  "idade": 30
+}
+
+### Criar pessoa (menor de idade)
+POST {{host}}/api/pessoas
+Content-Type: application/json
+
+{
+  "nome": "Bia Souza",
+  "idade": 15
+}
+
+### Excluir uma pessoa (troque o "1" pelo Id desejado)
+# Observação: apaga automaticamente todas as transações dessa pessoa (cascata).
+DELETE {{host}}/api/pessoas/1
+
+
+# ----------------------------------------------------------------------------
+# Transações
+# ----------------------------------------------------------------------------
+
+### Listar todas as transações
+GET {{host}}/api/transacoes
+
+### Criar transação — RECEITA (ajuste "pessoaId" para uma pessoa existente)
+POST {{host}}/api/transacoes
+Content-Type: application/json
+
+{
+  "descricao": "Salário",
+  "valor": 5000,
+  "tipo": "Receita",
+  "pessoaId": 1
+}
+
+### Criar transação — DESPESA
+POST {{host}}/api/transacoes
+Content-Type: application/json
+
+{
+  "descricao": "Aluguel",
+  "valor": 1500,
+  "tipo": "Despesa",
+  "pessoaId": 1
+}
+
+### Regra de negócio: menor de idade cadastrando RECEITA -> deve retornar 400
+# Use o "pessoaId" de uma pessoa com menos de 18 anos.
+POST {{host}}/api/transacoes
+Content-Type: application/json
+
+{
+  "descricao": "Mesada",
+  "valor": 200,
+  "tipo": "Receita",
+  "pessoaId": 2
+}
+
+
+# ----------------------------------------------------------------------------
+# Totais
+# ----------------------------------------------------------------------------
+
+### Consultar os totais (por pessoa + total geral)
+GET {{host}}/api/totais
