@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { pessoasApi, transacoesApi } from '../api/client'
 import type { Pessoa, TipoTransacao, Transacao } from '../api/types'
 import { formatarMoeda } from '../utils/formato'
@@ -13,6 +13,7 @@ export function TransacoesPage() {
   const [pessoas, setPessoas] = useState<Pessoa[]>([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState<string | null>(null)
+  const [sucesso, setSucesso] = useState<string | null>(null)
 
   // Campos do formulário.
   const [descricao, setDescricao] = useState('')
@@ -20,6 +21,9 @@ export function TransacoesPage() {
   const [tipo, setTipo] = useState<TipoTransacao>('Despesa')
   const [pessoaId, setPessoaId] = useState('')
   const [enviando, setEnviando] = useState(false)
+
+  // Referência ao campo Descrição, para devolver o foco após cadastrar.
+  const descricaoRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     carregar()
@@ -55,20 +59,30 @@ export function TransacoesPage() {
     }
   }, [menorSelecionado, tipo])
 
+  // Exibe uma mensagem de sucesso que desaparece sozinha após alguns segundos.
+  function mostrarSucesso(mensagem: string) {
+    setSucesso(mensagem)
+    window.setTimeout(() => setSucesso(null), 3000)
+  }
+
   async function handleCriar(evento: FormEvent) {
     evento.preventDefault()
     setEnviando(true)
     setErro(null)
+    const descricaoCriada = descricao.trim()
     try {
       await transacoesApi.criar({
-        descricao: descricao.trim(),
+        descricao: descricaoCriada,
         valor: Number(valor),
         tipo,
         pessoaId: Number(pessoaId),
       })
+      // Mantém a pessoa e o tipo selecionados para facilitar vários lançamentos.
       setDescricao('')
       setValor('')
       await carregar()
+      mostrarSucesso(`Transação "${descricaoCriada}" cadastrada.`)
+      descricaoRef.current?.focus()
     } catch (e) {
       setErro((e as Error).message)
     } finally {
@@ -84,6 +98,7 @@ export function TransacoesPage() {
   return (
     <>
       {erro && <div className="alerta-erro">{erro}</div>}
+      {sucesso && <div className="alerta-sucesso">{sucesso}</div>}
 
       <div className="card">
         <div className="card-header">
@@ -104,9 +119,11 @@ export function TransacoesPage() {
                 <label htmlFor="descricao">Descrição</label>
                 <input
                   id="descricao"
+                  ref={descricaoRef}
                   type="text"
                   value={descricao}
                   maxLength={250}
+                  autoFocus
                   placeholder="Ex.: Conta de luz"
                   onChange={(e) => setDescricao(e.target.value)}
                 />

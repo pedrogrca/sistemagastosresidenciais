@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { pessoasApi } from '../api/client'
 import type { Pessoa } from '../api/types'
 
@@ -11,11 +11,16 @@ export function PessoasPage() {
   const [pessoas, setPessoas] = useState<Pessoa[]>([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState<string | null>(null)
+  const [sucesso, setSucesso] = useState<string | null>(null)
 
   // Campos do formulário de cadastro.
   const [nome, setNome] = useState('')
   const [idade, setIdade] = useState('')
   const [enviando, setEnviando] = useState(false)
+
+  // Referência ao campo Nome, para devolver o foco a ele após cadastrar
+  // (permite cadastrar várias pessoas em sequência sem tocar no mouse).
+  const nomeRef = useRef<HTMLInputElement>(null)
 
   // Carrega a lista assim que a tela é aberta.
   useEffect(() => {
@@ -34,16 +39,25 @@ export function PessoasPage() {
     }
   }
 
+  // Exibe uma mensagem de sucesso que desaparece sozinha após alguns segundos.
+  function mostrarSucesso(mensagem: string) {
+    setSucesso(mensagem)
+    window.setTimeout(() => setSucesso(null), 3000)
+  }
+
   async function handleCriar(evento: FormEvent) {
     evento.preventDefault()
     setEnviando(true)
     setErro(null)
+    const nomeCriado = nome.trim()
     try {
-      await pessoasApi.criar({ nome: nome.trim(), idade: Number(idade) })
+      await pessoasApi.criar({ nome: nomeCriado, idade: Number(idade) })
       // Limpa o formulário e recarrega a lista somente após o sucesso.
       setNome('')
       setIdade('')
       await carregarPessoas()
+      mostrarSucesso(`"${nomeCriado}" cadastrada com sucesso.`)
+      nomeRef.current?.focus()
     } catch (e) {
       setErro((e as Error).message)
     } finally {
@@ -61,18 +75,21 @@ export function PessoasPage() {
     try {
       await pessoasApi.remover(pessoa.id)
       await carregarPessoas()
+      mostrarSucesso(`"${pessoa.nome}" foi excluída.`)
     } catch (e) {
       setErro((e as Error).message)
     }
   }
 
   // Validação simples do formulário no cliente (o back-end valida de novo).
+  const idadeNumero = Number(idade)
   const formularioValido =
-    nome.trim().length > 0 && idade !== '' && Number(idade) >= 0
+    nome.trim().length > 0 && idade !== '' && idadeNumero >= 0 && idadeNumero <= 130
 
   return (
     <>
       {erro && <div className="alerta-erro">{erro}</div>}
+      {sucesso && <div className="alerta-sucesso">{sucesso}</div>}
 
       <div className="card">
         <h2>Cadastrar pessoa</h2>
@@ -82,9 +99,11 @@ export function PessoasPage() {
               <label htmlFor="nome">Nome</label>
               <input
                 id="nome"
+                ref={nomeRef}
                 type="text"
                 value={nome}
                 maxLength={150}
+                autoFocus
                 placeholder="Ex.: Maria Silva"
                 onChange={(e) => setNome(e.target.value)}
               />
@@ -93,12 +112,13 @@ export function PessoasPage() {
               <label htmlFor="idade">Idade</label>
               <input
                 id="idade"
-                type="number"
-                min={0}
-                max={130}
+                type="text"
+                inputMode="numeric"
                 value={idade}
+                maxLength={3}
                 placeholder="Ex.: 30"
-                onChange={(e) => setIdade(e.target.value)}
+                // Aceita apenas dígitos: idade é sempre um número inteiro.
+                onChange={(e) => setIdade(e.target.value.replace(/\D/g, ''))}
               />
             </div>
             <div className="campo">

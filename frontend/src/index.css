@@ -368,6 +368,16 @@ h1, h2, h3 {
   font-size: 14px;
 }
 
+.alerta-sucesso {
+  background: var(--receita-suave);
+  color: var(--receita);
+  border: 1px solid #a7f3d0;
+  padding: 11px 14px;
+  border-radius: var(--raio-sm);
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
 .aviso {
   background: var(--aviso-suave);
   color: var(--aviso-texto);
