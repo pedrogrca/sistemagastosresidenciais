@@ -61,6 +61,12 @@ public class AppDbContext : DbContext
                   .IsRequired()
                   .HasConversion<string>()
                   .HasMaxLength(20);
+
+            // A categoria também é salva como texto legível no banco.
+            entity.Property(t => t.Categoria)
+                  .IsRequired()
+                  .HasConversion<string>()
+                  .HasMaxLength(30);
         });
     }
 }

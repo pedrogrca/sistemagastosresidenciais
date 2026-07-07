@@ -23,6 +23,9 @@ public class CriarTransacaoRequest
     [Required(ErrorMessage = "O tipo é obrigatório (Despesa ou Receita).")]
     public TipoTransacao? Tipo { get; set; }
 
+    [Required(ErrorMessage = "A categoria é obrigatória.")]
+    public CategoriaTransacao? Categoria { get; set; }
+
     [Required(ErrorMessage = "A pessoa (PessoaId) é obrigatória.")]
     public int? PessoaId { get; set; }
 }

@@ -1,12 +1,18 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { pessoasApi, transacoesApi } from '../api/client'
-import type { Pessoa, TipoTransacao, Transacao } from '../api/types'
+import type {
+  CategoriaTransacao,
+  Pessoa,
+  TipoTransacao,
+  Transacao,
+} from '../api/types'
 import { formatarMoeda } from '../utils/formato'
+import { CATEGORIAS, LISTA_CATEGORIAS } from '../utils/categorias'
 
 /**
  * Tela de cadastro de transações: formulário (com a regra do menor de idade
- * refletida na interface) + listagem. Carrega as pessoas para o seletor e as
- * transações para a tabela.
+ * refletida na interface) + listagem com exclusão. Carrega as pessoas para o
+ * seletor e as transações para a tabela.
  */
 export function TransacoesPage() {
   const [transacoes, setTransacoes] = useState<Transacao[]>([])
@@ -19,10 +25,10 @@ export function TransacoesPage() {
   const [descricao, setDescricao] = useState('')
   const [valor, setValor] = useState('')
   const [tipo, setTipo] = useState<TipoTransacao>('Despesa')
+  const [categoria, setCategoria] = useState<CategoriaTransacao | ''>('')
   const [pessoaId, setPessoaId] = useState('')
   const [enviando, setEnviando] = useState(false)
 
-  // Referência ao campo Descrição, para devolver o foco após cadastrar.
   const descricaoRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -33,7 +39,6 @@ export function TransacoesPage() {
     setCarregando(true)
     setErro(null)
     try {
-      // Busca pessoas e transações em paralelo.
       const [listaPessoas, listaTransacoes] = await Promise.all([
         pessoasApi.listar(),
         transacoesApi.listar(),
@@ -50,16 +55,13 @@ export function TransacoesPage() {
   const pessoaSelecionada = pessoas.find((p) => p.id === Number(pessoaId))
   const menorSelecionado = pessoaSelecionada?.menorDeIdade ?? false
 
-  // Regra do desafio refletida na interface: se um menor estiver selecionado
-  // e o tipo estiver como "Receita", voltamos para "Despesa" (o back-end
-  // também bloqueia, mas aqui evitamos que o usuário nem tente).
+  // Regra do desafio refletida na interface: menor de idade só pode despesa.
   useEffect(() => {
     if (menorSelecionado && tipo === 'Receita') {
       setTipo('Despesa')
     }
   }, [menorSelecionado, tipo])
 
-  // Exibe uma mensagem de sucesso que desaparece sozinha após alguns segundos.
   function mostrarSucesso(mensagem: string) {
     setSucesso(mensagem)
     window.setTimeout(() => setSucesso(null), 3000)
@@ -75,9 +77,10 @@ export function TransacoesPage() {
         descricao: descricaoCriada,
         valor: Number(valor),
         tipo,
+        categoria: categoria as CategoriaTransacao,
         pessoaId: Number(pessoaId),
       })
-      // Mantém a pessoa e o tipo selecionados para facilitar vários lançamentos.
+      // Mantém tipo, categoria e pessoa para facilitar vários lançamentos.
       setDescricao('')
       setValor('')
       await carregar()
@@ -90,8 +93,28 @@ export function TransacoesPage() {
     }
   }
 
+  async function handleRemover(transacao: Transacao) {
+    const confirmado = window.confirm(
+      `Excluir a transação "${transacao.descricao}"? (a pessoa não é afetada)`,
+    )
+    if (!confirmado) return
+
+    setErro(null)
+    try {
+      await transacoesApi.remover(transacao.id)
+      await carregar()
+      mostrarSucesso(`Transação "${transacao.descricao}" excluída.`)
+    } catch (e) {
+      setErro((e as Error).message)
+    }
+  }
+
   const formularioValido =
-    descricao.trim() !== '' && valor !== '' && Number(valor) > 0 && pessoaId !== ''
+    descricao.trim() !== '' &&
+    valor !== '' &&
+    Number(valor) > 0 &&
+    categoria !== '' &&
+    pessoaId !== ''
 
   const semPessoas = !carregando && pessoas.length === 0
 
@@ -104,7 +127,7 @@ export function TransacoesPage() {
         <div className="card-header">
           <h2>Cadastrar transação</h2>
           <p className="card-subtitulo">
-            Registre uma receita ou despesa vinculada a uma pessoa.
+            Registre uma receita ou despesa vinculada a uma pessoa e categoria.
           </p>
         </div>
 
@@ -170,6 +193,23 @@ export function TransacoesPage() {
                 </select>
               </div>
               <div className="campo">
+                <label htmlFor="categoria">Categoria</label>
+                <select
+                  id="categoria"
+                  value={categoria}
+                  onChange={(e) =>
+                    setCategoria(e.target.value as CategoriaTransacao)
+                  }
+                >
+                  <option value="">Selecione...</option>
+                  {LISTA_CATEGORIAS.map((c) => (
+                    <option key={c} value={c}>
+                      {CATEGORIAS[c].rotulo}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="campo">
                 <button
                   type="submit"
                   className="btn btn-primario"
@@ -202,15 +242,24 @@ export function TransacoesPage() {
               <thead>
                 <tr>
                   <th>Descrição</th>
+                  <th>Categoria</th>
                   <th>Pessoa</th>
                   <th>Tipo</th>
                   <th className="num">Valor</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {transacoes.map((t) => (
                   <tr key={t.id}>
                     <td>{t.descricao}</td>
+                    <td>
+                      <span
+                        className="cat-dot"
+                        style={{ background: CATEGORIAS[t.categoria].cor }}
+                      />
+                      {CATEGORIAS[t.categoria].rotulo}
+                    </td>
                     <td>{t.pessoaNome}</td>
                     <td>
                       <span
@@ -232,6 +281,14 @@ export function TransacoesPage() {
                     >
                       {t.tipo === 'Receita' ? '+ ' : '− '}
                       {formatarMoeda(t.valor)}
+                    </td>
+                    <td className="num">
+                      <button
+                        className="btn btn-perigo"
+                        onClick={() => handleRemover(t)}
+                      >
+                        Excluir
+                      </button>
                     </td>
                   </tr>
                 ))}

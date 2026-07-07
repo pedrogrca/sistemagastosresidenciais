@@ -73,6 +73,7 @@ export const transacoesApi = {
       method: 'POST',
       body: JSON.stringify(dados),
     }),
+  remover: (id: number) => request<void>(`/transacoes/${id}`, { method: 'DELETE' }),
 }
 
 /** Consulta de totais. */

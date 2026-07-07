@@ -4,6 +4,17 @@
 /** Tipo de uma transação (mesmos valores do enum do back-end). */
 export type TipoTransacao = 'Despesa' | 'Receita'
 
+/** Categoria de uma transação (mesmos valores do enum do back-end). */
+export type CategoriaTransacao =
+  | 'Moradia'
+  | 'Alimentacao'
+  | 'Transporte'
+  | 'Saude'
+  | 'Educacao'
+  | 'Lazer'
+  | 'Salario'
+  | 'Outros'
+
 /** Pessoa retornada pela API. */
 export interface Pessoa {
   id: number
@@ -24,6 +35,7 @@ export interface Transacao {
   descricao: string
   valor: number
   tipo: TipoTransacao
+  categoria: CategoriaTransacao
   pessoaId: number
   pessoaNome: string
 }
@@ -33,6 +45,7 @@ export interface CriarTransacaoRequest {
   descricao: string
   valor: number
   tipo: TipoTransacao
+  categoria: CategoriaTransacao
   pessoaId: number
 }
 

@@ -4,7 +4,6 @@ namespace GastosResidenciais.Api.Services;
 
 /// <summary>
 /// Contrato do serviço de transações.
-/// O desafio pede apenas criação e listagem (sem edição/exclusão).
 /// </summary>
 public interface ITransacaoService
 {
@@ -16,4 +15,7 @@ public interface ITransacaoService
 
     /// <summary>Lista todas as transações cadastradas.</summary>
     Task<IEnumerable<TransacaoResponse>> ListarAsync();
+
+    /// <summary>Remove uma transação (não afeta a pessoa dona dela).</summary>
+    Task RemoverAsync(int id);
 }

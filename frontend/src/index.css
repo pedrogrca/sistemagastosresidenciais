@@ -318,6 +318,16 @@ h1, h2, h3 {
   color: var(--aviso-texto);
 }
 
+/* Bolinha colorida que identifica a categoria (na lista e na legenda). */
+.cat-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 7px;
+  vertical-align: middle;
+}
+
 /* ---------- Valores monetários ---------- */
 .valor-positivo {
   color: var(--receita);

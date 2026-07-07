@@ -19,6 +19,9 @@ public class Transacao
     /// <summary>Indica se a transação é uma despesa ou uma receita.</summary>
     public TipoTransacao Tipo { get; set; }
 
+    /// <summary>Categoria da transação (ex.: Moradia, Alimentação).</summary>
+    public CategoriaTransacao Categoria { get; set; }
+
     /// <summary>
     /// Chave estrangeira: identificador da pessoa dona da transação.
     /// </summary>

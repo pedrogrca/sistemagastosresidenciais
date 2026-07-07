@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GastosResidenciais.Api.Controllers;
 
 /// <summary>
-/// Endpoints REST para o cadastro de transações (apenas criação e listagem).
+/// Endpoints REST para o cadastro de transações (criação, listagem e exclusão).
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -32,5 +32,13 @@ public class TransacoesController : ControllerBase
     {
         var transacao = await _transacaoService.CriarAsync(request);
         return CreatedAtAction(nameof(Listar), new { id = transacao.Id }, transacao);
+    }
+
+    /// <summary>Remove uma transação (a pessoa dona não é afetada).</summary>
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Remover(int id)
+    {
+        await _transacaoService.RemoverAsync(id);
+        return NoContent();
     }
 }

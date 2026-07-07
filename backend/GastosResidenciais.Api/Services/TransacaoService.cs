@@ -41,6 +41,7 @@ public class TransacaoService : ITransacaoService
             Descricao = request.Descricao.Trim(),
             Valor = request.Valor,
             Tipo = tipo,
+            Categoria = request.Categoria!.Value,
             PessoaId = pessoa.Id
         };
 
@@ -53,6 +54,7 @@ public class TransacaoService : ITransacaoService
             Descricao = transacao.Descricao,
             Valor = transacao.Valor,
             Tipo = transacao.Tipo,
+            Categoria = transacao.Categoria,
             PessoaId = pessoa.Id,
             PessoaNome = pessoa.Nome
         };
@@ -69,10 +71,20 @@ public class TransacaoService : ITransacaoService
                 Descricao = t.Descricao,
                 Valor = t.Valor,
                 Tipo = t.Tipo,
+                Categoria = t.Categoria,
                 PessoaId = t.PessoaId,
                 // t.Pessoa nunca é nulo aqui: toda transação tem uma pessoa (FK obrigatória).
                 PessoaNome = t.Pessoa!.Nome
             })
             .ToListAsync();
+    }
+
+    public async Task RemoverAsync(int id)
+    {
+        var transacao = await _context.Transacoes.FindAsync(id)
+            ?? throw new NaoEncontradoException($"Transação com Id {id} não encontrada.");
+
+        _context.Transacoes.Remove(transacao);
+        await _context.SaveChangesAsync();
     }
 }
