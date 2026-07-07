@@ -9,6 +9,18 @@ O projeto é dividido em duas partes:
 
 ---
 
+## 📸 Demonstração
+
+**Cadastro de pessoas** (com a marcação de menor de idade)
+
+![Tela de cadastro de pessoas](docs/tela-pessoas.png)
+
+**Consulta de totais** (por pessoa e total geral)
+
+![Tela de consulta de totais](docs/tela-totais.png)
+
+---
+
 ## 🧰 Tecnologias
 
 | Camada | Tecnologias |
