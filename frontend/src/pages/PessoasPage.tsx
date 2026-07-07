@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { pessoasApi } from '../api/client'
 import type { Pessoa } from '../api/types'
+import { DashboardPessoa } from './DashboardPessoa'
 
 /**
  * Tela de cadastro de pessoas: formulário para adicionar + tabela com a
@@ -12,6 +13,8 @@ export function PessoasPage() {
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState<string | null>(null)
   const [sucesso, setSucesso] = useState<string | null>(null)
+  // Pessoa cujo dashboard individual está aberto (null = mostra a lista).
+  const [pessoaSelecionada, setPessoaSelecionada] = useState<Pessoa | null>(null)
 
   // Campos do formulário de cadastro.
   const [nome, setNome] = useState('')
@@ -86,6 +89,19 @@ export function PessoasPage() {
   const formularioValido =
     nome.trim().length > 0 && idade !== '' && idadeNumero >= 0 && idadeNumero <= 130
 
+  // Se uma pessoa foi selecionada, mostramos o dashboard individual dela.
+  if (pessoaSelecionada) {
+    return (
+      <DashboardPessoa
+        pessoa={pessoaSelecionada}
+        onVoltar={() => {
+          setPessoaSelecionada(null)
+          carregarPessoas()
+        }}
+      />
+    )
+  }
+
   return (
     <>
       {erro && <div className="alerta-erro">{erro}</div>}
@@ -155,7 +171,13 @@ export function PessoasPage() {
                 <tr key={pessoa.id}>
                   <td>{pessoa.id}</td>
                   <td>
-                    {pessoa.nome}
+                    <button
+                      className="link-pessoa"
+                      onClick={() => setPessoaSelecionada(pessoa)}
+                      title="Ver dashboard individual"
+                    >
+                      {pessoa.nome}
+                    </button>
                     {pessoa.menorDeIdade && (
                       <span className="selo selo-menor" style={{ marginLeft: 8 }}>
                         menor de idade

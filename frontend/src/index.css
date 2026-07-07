@@ -403,6 +403,126 @@ h1, h2, h3 {
   padding: 28px;
 }
 
+/* ---------- Toggle Despesas/Receitas (nos gráficos) ---------- */
+.mini-toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: #e8ecf3;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+.mini-toggle button {
+  border: none;
+  background: transparent;
+  color: var(--texto-suave);
+  padding: 6px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mini-toggle button.ativo {
+  background: var(--superficie);
+  color: var(--primaria);
+  box-shadow: var(--sombra-sm);
+}
+
+/* ---------- Gráfico de rosca + legenda ---------- */
+.grafico-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+}
+
+.grafico-svg {
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+}
+
+.grafico-centro-rotulo {
+  font-size: 12px;
+  fill: var(--texto-suave);
+}
+
+.grafico-centro-valor {
+  font-size: 17px;
+  font-weight: 700;
+  fill: var(--texto);
+}
+
+.legenda {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-width: 220px;
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 7px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--texto);
+  text-align: left;
+}
+
+.legenda-item:hover {
+  background: var(--fundo);
+}
+
+.legenda-item.ativo {
+  background: var(--primaria-suave);
+}
+
+.legenda-rotulo {
+  flex: 1;
+}
+
+.legenda-valor {
+  color: var(--texto-suave);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Dashboard individual ---------- */
+.link-pessoa {
+  border: none;
+  background: transparent;
+  color: var(--primaria);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.link-pessoa:hover {
+  text-decoration: underline;
+}
+
+.dash-topo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.dash-nome {
+  font-size: 20px;
+}
+
 /* ---------- Responsividade ---------- */
 @media (max-width: 640px) {
   .tabela th,

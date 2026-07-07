@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
-import { totaisApi } from '../api/client'
-import type { Totais } from '../api/types'
+import { totaisApi, transacoesApi } from '../api/client'
+import type { Totais, Transacao } from '../api/types'
 import { formatarMoeda } from '../utils/formato'
+import { PainelCategorias } from '../components/PainelCategorias'
 
 /**
- * Tela de consulta de totais: cartões de resumo geral no topo e, abaixo, a
- * tabela com os totais de cada pessoa (com o total geral no rodapé).
+ * Tela de consulta de totais (dashboard coletivo): cartões de resumo, gráfico
+ * por categoria de todas as pessoas, e a tabela com os totais de cada pessoa.
  */
 export function TotaisPage() {
   const [dados, setDados] = useState<Totais | null>(null)
+  const [transacoes, setTransacoes] = useState<Transacao[]>([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState<string | null>(null)
 
@@ -20,7 +22,13 @@ export function TotaisPage() {
     setCarregando(true)
     setErro(null)
     try {
-      setDados(await totaisApi.obter())
+      // Totais (para os cartões/tabela) e transações (para o gráfico) em paralelo.
+      const [totais, listaTransacoes] = await Promise.all([
+        totaisApi.obter(),
+        transacoesApi.listar(),
+      ])
+      setDados(totais)
+      setTransacoes(listaTransacoes)
     } catch (e) {
       setErro((e as Error).message)
     } finally {
@@ -28,7 +36,6 @@ export function TotaisPage() {
     }
   }
 
-  // Saldo positivo aparece em verde; negativo, em vermelho.
   function classeSaldo(valor: number) {
     return valor >= 0 ? 'num valor-positivo' : 'num valor-negativo'
   }
@@ -72,6 +79,15 @@ export function TotaisPage() {
             {formatarMoeda(totalGeral.saldoLiquido)}
           </strong>
         </div>
+      </div>
+
+      <div className="card">
+        <h2>Distribuição por categoria (todos)</h2>
+        {transacoes.length === 0 ? (
+          <p className="vazio">Nenhuma transação cadastrada ainda.</p>
+        ) : (
+          <PainelCategorias transacoes={transacoes} />
+        )}
       </div>
 
       <div className="card">
