@@ -11,13 +11,21 @@ O projeto é dividido em duas partes:
 
 ## 📸 Demonstração
 
-**Cadastro de pessoas** (com a marcação de menor de idade)
+**Cadastro de pessoas** — clique no nome para abrir o dashboard individual.
 
 ![Tela de cadastro de pessoas](docs/tela-pessoas.png)
 
-**Consulta de totais** (por pessoa e total geral)
+**Cadastro de transações** — com categoria, tipo e exclusão.
+
+![Tela de cadastro de transações](docs/tela-transacoes.png)
+
+**Consulta de totais (dashboard coletivo)** — resumo, gráfico por categoria e totais por pessoa.
 
 ![Tela de consulta de totais](docs/tela-totais.png)
+
+**Dashboard individual** — receitas, despesas, gráfico e transações de cada pessoa.
+
+![Dashboard individual](docs/dashboard-individual.png)
 
 ---
 
@@ -38,14 +46,19 @@ O projeto é dividido em duas partes:
 - Ao **excluir uma pessoa**, todas as **transações dela também são excluídas** (cascata).
 
 ### Cadastro de transações
-- Criar e listar transações.
-- Cada transação tem descrição, valor, tipo (**despesa** ou **receita**) e a pessoa dona.
+- Criar, listar e **excluir** transações (excluir uma transação **não** afeta a pessoa).
+- Cada transação tem descrição, valor, tipo (**despesa** ou **receita**), **categoria** (Moradia, Alimentação, Transporte, Saúde, Educação, Lazer, Salário, Outros) e a pessoa dona.
 - A pessoa informada precisa existir.
 - **Regra:** pessoas **menores de 18 anos** só podem cadastrar **despesas** (nunca receitas) — validado no back-end e refletido na interface.
 
 ### Consulta de totais
 - Lista todas as pessoas com **total de receitas, total de despesas e saldo** (receitas − despesas).
 - Exibe o **total geral** somando todas as pessoas (receitas, despesas e saldo líquido).
+
+### Dashboards e gráficos
+- **Dashboard individual:** clique no nome de uma pessoa para ver os totais, o gráfico e as transações só dela.
+- **Gráfico de rosca (donut) por categoria**, feito em **SVG puro** (sem biblioteca externa), no dashboard individual e no coletivo.
+- Alternância entre **despesas/receitas** e **filtro por categoria** (clicar numa fatia destaca e filtra a lista).
 
 ### Persistência
 - Os dados são gravados em um arquivo **SQLite** (`gastosresidenciais.db`), então **persistem após fechar a aplicação**.
@@ -72,8 +85,9 @@ sistemagastosresidenciais/
 ├── frontend/
 │   └── src/
 │       ├── api/             # Cliente HTTP e tipos (espelham os DTOs)
-│       ├── pages/           # Telas: Pessoas, Transações, Totais
-│       ├── utils/           # Utilitários (ex.: formatação de moeda)
+│       ├── components/      # Componentes reutilizáveis (gráfico de rosca, etc.)
+│       ├── pages/           # Telas: Pessoas, Transações, Totais, Dashboard
+│       ├── utils/           # Utilitários (moeda, categorias)
 │       ├── App.tsx          # Layout e navegação por abas
 │       └── main.tsx         # Ponto de entrada
 ├── global.json              # Fixa o uso do SDK .NET 8
